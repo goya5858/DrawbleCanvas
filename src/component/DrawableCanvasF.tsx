@@ -38,13 +38,11 @@ const DrawableCanvasF = (props: CanvasProps) => {
     const startDrawing: MouseOrTouchEventHandler = (e) => {
         setDrawing(true);
         const position = offsetPosition(e);
-        if (position) { 
+        const ctx = getContext();
+        if (position && ctx) { 
             const {offsetX: x, offsetY: y} = position;
-            const ctx = getContext();
-            if (ctx){
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-            }
+            ctx.beginPath();
+            ctx.moveTo(x, y);
         }
     };
 
@@ -59,13 +57,11 @@ const DrawableCanvasF = (props: CanvasProps) => {
     const draw: MouseOrTouchEventHandler = (e) => {
         if (!drawing) return;
         const position = offsetPosition(e);
-        if (position){
+        const ctx = getContext();
+        if (position && ctx){
             const {offsetX: x, offsetY: y} = position;
-            const ctx = getContext();
-            if (ctx){
-                ctx.lineTo(x, y);
-                ctx.stroke();
-            }
+            ctx.lineTo(x, y);
+            ctx.stroke();
         }
     };
 
