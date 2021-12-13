@@ -10,48 +10,47 @@ const DrawableCanvasF = (props: CanvasProps) => {
     const [drawing, setDrawing] = useState(false);
     let canvas: React.MutableRefObject<HTMLCanvasElement | null> = useRef(null)
 
+    const getContext = () => {
+        let ctx: CanvasRenderingContext2D | null = null;
+        if (canvas.current){
+            ctx = canvas.current.getContext("2d");
+            if (ctx && props.lineWidth) 
+                { ctx.lineWidth = props.lineWidth; }
+        }
+        return ctx;
+    }
+
     const startDrawing = (x: number, y: number) => {
         setDrawing(true);
-        if (canvas.current){
-            const ctx = canvas.current.getContext("2d");
-            if (ctx){
-                ctx.beginPath();
-                if (props.lineWidth){
-                    ctx.lineWidth = props.lineWidth;
-                }
-                ctx.moveTo(x, y);
-            }
+        const ctx = getContext();
+        if (ctx){
+            ctx.beginPath();
+            ctx.moveTo(x, y);
         }
     };
 
     const endDrawing = () => {
         setDrawing(false);
-        if (canvas.current){
-            const ctx = canvas.current.getContext("2d");
-            if (ctx!=null) {
-                ctx.closePath();
-            }
+        const ctx = getContext();
+        if (ctx){
+            ctx.closePath();
         }
     };
 
     const draw = (x: number, y: number) => {
         if (!drawing) return;
-        if (canvas.current){
-            const ctx = canvas.current.getContext("2d");
-            if (ctx!=null){
-                ctx.lineTo(x, y);
-                ctx.stroke();
-            }
+        const ctx = getContext();
+        if (ctx){
+            ctx.lineTo(x, y);
+            ctx.stroke();
         }
     };
 
     const clearCanvas = () => {
-        if (canvas.current){
-            const ctx = canvas.current.getContext("2d");
-            if (canvas==null || ctx==null) return ;
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        }
-    }
+        const ctx = getContext();
+        if (canvas==null || ctx==null) return ;
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    };
 
     return (
         <div>
