@@ -4,8 +4,23 @@ interface CanvasProps extends ComponentProps<any> {
     height?: number,
     width?: number,
     lineWidth?: number
-}
+};
 
+// マウスとタッチ両方に対応するための位置を返すType・関数
+type MouseOrTouchEventHandler<T = Element> = React.EventHandler< React.MouseEvent<T> | React.TouchEvent<T> >;
+
+const offsetPosition =  (e : React.MouseEvent | React.TouchEvent) => {
+    if (e.nativeEvent instanceof TouchEvent) {
+        const rect = (e.target as any).getBoundingClientRect();      
+        const offsetX = (e.nativeEvent.touches[0].clientX - window.pageXOffset - rect.left);
+        const offsetY = (e.nativeEvent.touches[0].clientY - window.pageYOffset - rect.top);
+        return { offsetX: offsetX, offsetY: offsetY };
+    } else if (e.nativeEvent instanceof MouseEvent) {
+      return { offsetX: e.nativeEvent.offsetX ,offsetY: e.nativeEvent.offsetY };
+    }
+};
+
+// ここからが本体　Canvasを返す関数
 const DrawableCanvasF = (props: CanvasProps) => {
     const [drawing, setDrawing] = useState(false);
     let canvas: React.MutableRefObject<HTMLCanvasElement | null> = useRef(null)
@@ -20,12 +35,16 @@ const DrawableCanvasF = (props: CanvasProps) => {
         return ctx;
     }
 
-    const startDrawing = (x: number, y: number) => {
+    const startDrawing: MouseOrTouchEventHandler = (e) => {
         setDrawing(true);
-        const ctx = getContext();
-        if (ctx){
-            ctx.beginPath();
-            ctx.moveTo(x, y);
+        const position = offsetPosition(e);
+        if (position) { 
+            const {offsetX: x, offsetY: y} = position;
+            const ctx = getContext();
+            if (ctx){
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            }
         }
     };
 
@@ -37,12 +56,16 @@ const DrawableCanvasF = (props: CanvasProps) => {
         }
     };
 
-    const draw = (x: number, y: number) => {
+    const draw: MouseOrTouchEventHandler = (e) => {
         if (!drawing) return;
-        const ctx = getContext();
-        if (ctx){
-            ctx.lineTo(x, y);
-            ctx.stroke();
+        const position = offsetPosition(e);
+        if (position){
+            const {offsetX: x, offsetY: y} = position;
+            const ctx = getContext();
+            if (ctx){
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
         }
     };
 
@@ -59,10 +82,10 @@ const DrawableCanvasF = (props: CanvasProps) => {
                 width={props.width}
                 height={props.height}
                 id="display-canvas"
-                onMouseDown={ e => startDrawing(e.nativeEvent.offsetX, e.nativeEvent.offsetY) }
-                onMouseUp={ () => endDrawing() }
-                onMouseLeave={ () => endDrawing() }                
-                onMouseMove={ e => draw(e.nativeEvent.offsetX, e.nativeEvent.offsetY) }
+                onMouseDown={ startDrawing }
+                onMouseUp={ endDrawing }
+                onMouseLeave={ endDrawing }                
+                onMouseMove={ draw }
                 style={props.style}
             />
             <button onClick={clearCanvas}>clear</button>
