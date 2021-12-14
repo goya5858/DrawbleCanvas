@@ -18,7 +18,7 @@ const offsetPosition =  (e : React.MouseEvent | React.TouchEvent) => {
     } else if (e.nativeEvent instanceof MouseEvent) {
       return { offsetX: e.nativeEvent.offsetX ,offsetY: e.nativeEvent.offsetY };
     }
-  };
+};
 
 // ここからが本体　Canvasを返す関数
 const DrawableCanvasF = (props: CanvasProps) => {
@@ -33,7 +33,7 @@ const DrawableCanvasF = (props: CanvasProps) => {
                 { ctx.lineWidth = props.lineWidth; }
         }
         return ctx;
-    }
+    };
 
     const startDrawing: MouseOrTouchEventHandler = (e) => {
         setDrawing(true);
@@ -49,9 +49,7 @@ const DrawableCanvasF = (props: CanvasProps) => {
     const endDrawing = () => {
         setDrawing(false);
         const ctx = getContext();
-        if (ctx){
-            ctx.closePath();
-        }
+        if (ctx){ ctx.closePath(); }
     };
 
     const draw: MouseOrTouchEventHandler = (e) => {
@@ -69,14 +67,14 @@ const DrawableCanvasF = (props: CanvasProps) => {
         if (canvas.current) {
             const dLink: any = document.createElement("a"); //ダウンロード用のエレメント作成
             dLink.href = canvas.current.toDataURL('image/png'); //画面データをpngに変換
-            dLink.download = "testaaa.png"; //DLするファイルの名前を設定
+            dLink.download = new Date().getTime() + '.png';; //DLするファイルの名前を設定
             dLink.click(); //クリックする = DLする
             dLink.remove();
         }
-    }
+    };
 
     const clearCanvas = () => {
-        downloadImg(); //キャンバス削除時に画像をダウンロード
+        //downloadImg(); //キャンバス削除時に画像をダウンロード
         const ctx = getContext();
         if (canvas==null || ctx==null) return ;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -96,7 +94,7 @@ const DrawableCanvasF = (props: CanvasProps) => {
                 style={props.style}
             />
             <button onClick={clearCanvas}>clear</button>
-                        
+            <button onClick={downloadImg}>Download</button>
         </div>
     )
 };
