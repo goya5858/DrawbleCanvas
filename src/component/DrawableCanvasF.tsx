@@ -82,18 +82,6 @@ const DrawableCanvasF = (props: CanvasProps) => {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     };
 
-    document.getElementById('download-link')?.addEventListener(
-        "click", (e: any)=> {
-            const a = e.target;
-            if (canvas.current){
-                a.href = canvas.current.toDataURL;
-                console.log( canvas.current.toDataURL );
-                a.download = new Date().getTime() + ".jpg";
-            }
-            
-        })
-
-
     return (
         <div>
             <canvas
