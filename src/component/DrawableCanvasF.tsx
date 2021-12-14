@@ -1,8 +1,8 @@
 import React, {useState, useRef, ComponentProps} from "react";
 
 interface CanvasProps extends ComponentProps<any> {
-    height?: number,
-    width?: number,
+    height: number,
+    width: number,
     lineWidth?: number
 };
 
@@ -23,12 +23,16 @@ const offsetPosition =  (e : React.MouseEvent | React.TouchEvent) => {
 // ここからが本体　Canvasを返す関数
 const DrawableCanvasF = (props: CanvasProps) => {
     const [drawing, setDrawing] = useState(false);
+    // 表示用のCanvasRef
     let canvas: React.MutableRefObject<HTMLCanvasElement | null> = useRef(null)
+    // データ取得時に一時的にリサイズしたデータを格納する
+    let hidden_canvas: React.MutableRefObject<HTMLCanvasElement | null> = useRef(null)
 
-    const getContext = () => {
+    // CanvasエレメントへのRefを入れると、対象のContextを返す関数
+    const getContext = ( canvases: React.MutableRefObject<HTMLCanvasElement | null> ) => {
         let ctx: CanvasRenderingContext2D | null = null;
-        if (canvas.current){
-            ctx = canvas.current.getContext("2d");
+        if (canvases.current){
+            ctx = canvases.current.getContext("2d");
             if (ctx && props.lineWidth) 
                 { ctx.lineWidth = props.lineWidth; }
         }
@@ -38,7 +42,7 @@ const DrawableCanvasF = (props: CanvasProps) => {
     const startDrawing: MouseOrTouchEventHandler = (e) => {
         setDrawing(true);
         const position = offsetPosition(e);
-        const ctx = getContext();
+        const ctx = getContext(canvas);
         if (position && ctx) { 
             const {offsetX: x, offsetY: y} = position;
             ctx.beginPath();
@@ -48,14 +52,14 @@ const DrawableCanvasF = (props: CanvasProps) => {
 
     const endDrawing = () => {
         setDrawing(false);
-        const ctx = getContext();
+        const ctx = getContext(canvas);
         if (ctx){ ctx.closePath(); }
     };
 
     const draw: MouseOrTouchEventHandler = (e) => {
         if (!drawing) return;
         const position = offsetPosition(e);
-        const ctx = getContext();
+        const ctx = getContext(canvas);
         if (position && ctx){
             const {offsetX: x, offsetY: y} = position;
             ctx.lineTo(x, y);
@@ -73,11 +77,34 @@ const DrawableCanvasF = (props: CanvasProps) => {
         }
     };
 
+    const getData= () => {
+        //const ctx  = getContext(canvas);
+        const hctx = getContext(hidden_canvas);
+        const data = new Float32Array(28*28); //出力用の28*28=784の一次元データ
+        if (hctx && canvas.current && hidden_canvas.current) {
+            // hctxの初期化
+            hctx.clearRect(0, 0, hidden_canvas.current.width, hidden_canvas.current.height);
+            // 元画像をリサイズしてhidden_canvasに書き込み
+            hctx.drawImage( canvas.current, 
+                0, 0, props.width,                 props.height, //元画像の範囲指定=全体
+                0, 0, hidden_canvas.current.width, hidden_canvas.current.height// 書き込み先の範囲指定=全体
+                ); 
+            const imgData = hctx.getImageData(0, 0, hidden_canvas.current.width, hidden_canvas.current.height); //pixelデータへ変換
+            for (let i = 0; i < data.length; ++i) {
+                data[i] = imgData.data[i * 4 + 3] / 255;
+            }
+        }
+        console.log(data);
+        return data;
+    }
+
     const clearCanvas = () => {
         //downloadImg(); //キャンバス削除時に画像をダウンロード
-        const ctx = getContext();
-        if (canvas==null || ctx==null) return ;
+        const ctx  = getContext(canvas);
+        const hctx = getContext(hidden_canvas);
+        if (canvas==null || ctx==null || hctx==null) return ;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        hctx.clearRect(0, 0, hctx.canvas.width, hctx.canvas.height);
     };
 
     return (
@@ -86,15 +113,23 @@ const DrawableCanvasF = (props: CanvasProps) => {
                 ref={canvas}
                 width={props.width}
                 height={props.height}
-                id="display-canvas"
                 onMouseDown={ startDrawing }
                 onMouseUp={ endDrawing }
                 onMouseLeave={ endDrawing }                
                 onMouseMove={ draw }
                 style={props.style}
+                id="display-canvas"
+            />
+            <canvas
+                ref={hidden_canvas}
+                width={"28px"}
+                height={"28px"}
+                style={props.style}
+                id="hidden-canvas"
             />
             <button onClick={clearCanvas}>clear</button>
             <button onClick={downloadImg}>Download</button>
+            <button onClick={getData}>GetData</button>
         </div>
     )
 };
