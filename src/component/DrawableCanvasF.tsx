@@ -11,14 +11,14 @@ type MouseOrTouchEventHandler<T = Element> = React.EventHandler< React.MouseEven
 
 const offsetPosition =  (e : React.MouseEvent | React.TouchEvent) => {
     if (e.nativeEvent instanceof TouchEvent) {
-        const rect = (e.target as any).getBoundingClientRect();      
-        const offsetX = (e.nativeEvent.touches[0].clientX - window.pageXOffset - rect.left);
-        const offsetY = (e.nativeEvent.touches[0].clientY - window.pageYOffset - rect.top);
-        return { offsetX: offsetX, offsetY: offsetY };
+      const rect = (e.target as any).getBoundingClientRect();      
+      const offsetX = (e.nativeEvent.touches[0].clientX - window.pageXOffset - rect.left);
+      const offsetY = (e.nativeEvent.touches[0].clientY - window.pageYOffset - rect.top);
+      return { offsetX, offsetY };
     } else if (e.nativeEvent instanceof MouseEvent) {
       return { offsetX: e.nativeEvent.offsetX ,offsetY: e.nativeEvent.offsetY };
     }
-};
+  };
 
 // ここからが本体　Canvasを返す関数
 const DrawableCanvasF = (props: CanvasProps) => {
@@ -65,11 +65,34 @@ const DrawableCanvasF = (props: CanvasProps) => {
         }
     };
 
+    const downloadImg = () => {
+        if (canvas.current) {
+            const dLink: any = document.createElement("a"); //ダウンロード用のエレメント作成
+            dLink.href = canvas.current.toDataURL('image/png'); //画面データをpngに変換
+            dLink.download = "testaaa.png"; //DLするファイルの名前を設定
+            dLink.click(); //クリックする = DLする
+            dLink.remove();
+        }
+    }
+
     const clearCanvas = () => {
+        downloadImg(); //キャンバス削除時に画像をダウンロード
         const ctx = getContext();
         if (canvas==null || ctx==null) return ;
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     };
+
+    document.getElementById('download-link')?.addEventListener(
+        "click", (e: any)=> {
+            const a = e.target;
+            if (canvas.current){
+                a.href = canvas.current.toDataURL;
+                console.log( canvas.current.toDataURL );
+                a.download = new Date().getTime() + ".jpg";
+            }
+            
+        })
+
 
     return (
         <div>
@@ -85,6 +108,7 @@ const DrawableCanvasF = (props: CanvasProps) => {
                 style={props.style}
             />
             <button onClick={clearCanvas}>clear</button>
+                        
         </div>
     )
 };
