@@ -117,6 +117,9 @@ const DrawableCanvasF = (props: CanvasProps) => {
                 onMouseUp={ endDrawing }
                 onMouseLeave={ endDrawing }                
                 onMouseMove={ draw }
+                onTouchStart={ startDrawing }
+                onTouchEnd={ endDrawing }
+                onTouchMove={ draw }
                 style={props.style}
                 id="display-canvas"
             />
