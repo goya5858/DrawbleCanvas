@@ -10,7 +10,7 @@ const FormImg = () => {
     }
     return (
         <div>
-            <form method="post" encType="multipart/form-data" action="https://neozbbmfag.execute-api.ap-northeast-1.amazonaws.com/testFunction">
+            <form method="post" encType="multipart/form-data" action="https://duw8yp1jr2.execute-api.ap-northeast-1.amazonaws.com/prob/">
                 <input type="file" 
                        name="example" 
                        accept="image/*" 
