@@ -1,15 +1,13 @@
 import axios from 'axios';
-//import * as React from 'react';
 import { useState } from 'react';
 
-const Apps = () => {
+const PostTxt = () => {
   const [textData, setTextData] = useState<string>();
 
   const handleChange = (e: any) => {
     console.log( typeof e.target.value )
     setTextData( e.target.value );
   }
-
 
   const handleSubmitData = async() => {
     axios({
@@ -40,4 +38,4 @@ const Apps = () => {
   );
 };
 
-export default Apps
+export default PostTxt
