@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {ChangeEvent, useState} from "react";
 
-const PostTxtFile = () => {
+const PostImgFile = () => {
   const [rawData,    setRawData]    = useState<string>();
   const [submitData, setSubmitData] = useState<string>();
 
@@ -51,7 +51,7 @@ const PostTxtFile = () => {
   );
 };
 
-export default PostTxtFile;
+export default PostImgFile;
 
 const fileToBase64 = async (file: File) => {
     return new Promise(resolve => {
