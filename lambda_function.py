@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     print("content:", content)
     text64 = content.split(",")[1]
     print("text64:", text64)
-    text_byte = base64.b64decode(b'44GT44KT44Gr44Gh44Gv') #byteデータに変換
+    text_byte = base64.b64decode(text64) #byteデータに変換
     print("text_byte:", text_byte)
     text_raw = text_byte.decode() #Byteデータをデコード
     print("text_raw:", text_raw)
