@@ -7,7 +7,8 @@ const PostImgFile = () => {
   const [imgURL,     setImgURL]     = useState<string>();
 
   useEffect( ()=>{
-    console.log("submitData: ", submitData);
+    //console.log("submitData: ", submitData);
+    console.log("IMG Loaded")
   }, [submitData] );
 
   // Inputが変更されるたびに表示&提出用のデータを更新
@@ -19,7 +20,7 @@ const PostImgFile = () => {
     setImgURL( imgURL ); //読み込んだ画像を表示
 
     //// 生のtextデータをファイルデータへ変換 (確認のため)
-    //const fileData = new File( [ e.target.value] , "text.txt",
+    //const _rawdata = new File( [ e.target.value] , "text.txt",
     //                 {  type: "text/plain",
     //                    lastModified: 0} );
 
@@ -32,11 +33,11 @@ const PostImgFile = () => {
                 } )
     setSubmitData( _submitdata );
 
-    console.log( "e.target.files[0]: ", e.target.files[0] );
-    console.log("_rawdata:", _rawdata);
-    console.log("imgURL: ", imgURL)
-    console.log("_submit-data:", _submitdata)
-    console.log("submit-data:", submitData)
+    //console.log( "e.target.files[0]: ", e.target.files[0] );
+    //console.log("_rawdata:", _rawdata);
+    //console.log("imgURL: ", imgURL)
+    //console.log("_submit-data:", _submitdata)
+    //console.log("submit-data:", submitData)
   }
 
   const handleSubmitData = async() => {
