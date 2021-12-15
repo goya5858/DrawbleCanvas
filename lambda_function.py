@@ -2,26 +2,30 @@ import json
 import datetime
 import boto3
 import os
+import sys
 import base64
 
 def lambda_handler(event, context):
     s3 = boto3.client("s3")
     
-    print(event)
+    #print(event)
     print(event.keys())
     print("event[body]:",  event["body"])
     
     body = json.loads(event["body"]) # str -> dict
     print("type of event[body]:", type(event["body"]))
-    print("type of body:", body)
+    #print("body:", body)
     content = body["text"]
-    print("content:", content)
+    print("size of content:", sys.getsizeof(body["text"]))
+    #print("content:", content)
     text64 = content.split(",")[1]
-    print("text64:", text64)
+    #print("text64:", text64)
     text_byte = base64.b64decode(text64) #byteデータに変換
     print("text_byte:", text_byte)
+    
+    ##### ここまで動いてる => Byteデータまで変換できてる ######
     text_raw = text_byte.decode() #Byteデータをデコード
-    print("text_raw:", text_raw)
+    #print("text_raw:", text_raw)
 
     filename     = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + ".txt"
     tmp_filename = "/tmp/" + filename

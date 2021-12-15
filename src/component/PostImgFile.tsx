@@ -1,10 +1,14 @@
 import axios from 'axios';
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useState, useEffect} from "react";
 
 const PostImgFile = () => {
   //const [rawData,    setRawData]    = useState<File>();
   const [submitData, setSubmitData] = useState<string>();
   const [imgURL,     setImgURL]     = useState<string>();
+
+  useEffect( ()=>{
+    console.log("submitData: ", submitData);
+  }, [submitData] );
 
   // Inputが変更されるたびに表示&提出用のデータを更新
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,14 +27,14 @@ const PostImgFile = () => {
     if (!_rawdata) return ; 
     const base64file  = await toBase64(_rawdata);
     const _submitdata = JSON.stringify( {
-                                          line_count: null,
-                                          text: base64file,
-                                        } )
+                  line_count: null,
+                  text: base64file,
+                } )
     setSubmitData( _submitdata );
 
     console.log( "e.target.files[0]: ", e.target.files[0] );
     console.log("_rawdata:", _rawdata);
-    console.log("imgURL: ", setImgURL)
+    console.log("imgURL: ", imgURL)
     console.log("_submit-data:", _submitdata)
     console.log("submit-data:", submitData)
   }
