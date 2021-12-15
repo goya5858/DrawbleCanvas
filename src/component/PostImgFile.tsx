@@ -42,7 +42,7 @@ const PostImgFile = () => {
   const handleSubmitData = async() => {
     axios({
       method: 'post',
-      url:    'https://a5gc3ic102.execute-api.ap-northeast-1.amazonaws.com/default/axiosFunction',
+      url:    'https://txsei0q801.execute-api.ap-northeast-1.amazonaws.com/default/axiosFunction2',
       data:   submitData,
     })
     .then(res => {
