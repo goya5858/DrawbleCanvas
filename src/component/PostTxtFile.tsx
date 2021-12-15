@@ -1,13 +1,20 @@
 import axios from 'axios';
 import {ChangeEvent, useState} from "react";
 
-const PostTxt = () => {
+const PostTxtFile = () => {
   const [textData, setTextData] = useState<string>();
+  const [textDataFile, setTextDataFile] = useState<string>();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     console.log( typeof e.target.value );
     //console.log( e.target.files );
     setTextData( e.target.value );
+
+    const newfile = new File( [ e.target.value] , "text.txt",
+                     {  type: "text/plain",
+                        lastModified: 0} );
+    const textURL  = URL.createObjectURL(newfile);
+    setTextDataFile( textURL );
   }
 
   const handleSubmitData = async() => {
@@ -16,7 +23,7 @@ const PostTxt = () => {
       url:'https://a5gc3ic102.execute-api.ap-northeast-1.amazonaws.com/default/axiosFunction',
       data: {
         line_count: null,
-        text: textData,
+        text: textDataFile,
       },
     })
     .then(res => {
@@ -39,4 +46,4 @@ const PostTxt = () => {
   );
 };
 
-export default PostTxt;
+export default PostTxtFile;
