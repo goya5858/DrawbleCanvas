@@ -28,6 +28,7 @@ def lambda_handler(event, context):
     #print("content:", content)
 
     text64 = content.split(",")[1] #Base64のテキストデータの必要部分だけ取り出し
+    print("num of base64-sep is", len(content.split(",")))
     #print("text64:", text64)
 
     text_byte = base64.b64decode(text64) #byteデータに変換
