@@ -39,6 +39,7 @@ def lambda_handler(event, context):
         ##print("text_raw:", text_raw)
     
     jpg=np.frombuffer(text_byte,dtype=np.uint8)
+    print("success convert to numpy array")
     #print(jpg)
     img = cv2.imdecode(jpg, cv2.IMREAD_COLOR)
     print("success convert to IMG by imdecode")
