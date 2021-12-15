@@ -20,6 +20,9 @@ const Apps = () => {
         text: textData,
       },
     })
+    .then(res => {
+      console.log(res)
+    })
     .catch(results => {
       console.log(results);
     });
