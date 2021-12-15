@@ -8,6 +8,11 @@ import numpy as np
 import cv2
 
 def lambda_handler(event, context):
+    #filename  = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + ".txt"
+    filename  = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + ".jpg"
+    tmp_filename = "/tmp/" + filename
+    bucket_name  = "test-bucket-5858"
+
     s3 = boto3.client("s3")
     
     #print(event)
@@ -27,6 +32,7 @@ def lambda_handler(event, context):
 
     text_byte = base64.b64decode(text64) #byteデータに変換
     #print("text_byte:", text_byte)
+    print("success convert to Byte_data")
 
     ##### TEXTデータではこっちを使用 ######
         #text_raw = text_byte.decode() #Byteデータをデコード
@@ -35,14 +41,12 @@ def lambda_handler(event, context):
     jpg=np.frombuffer(text_byte,dtype=np.uint8)
     #print(jpg)
     img = cv2.imdecode(jpg, cv2.IMREAD_COLOR)
+    print("success convert to IMG by imdecode")
 
-    #filename  = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + ".txt"
-    filename  = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + ".jpg"
-    tmp_filename = "/tmp/" + filename
-    bucket_name  = "test-bucket-5858"
     #with open(tmp_filename, "w") as f:
     #    f.write(text_raw)
     cv2.imwrite(tmp_filename,img) # jpgファイルの保存
+    print("success img save to /tmp/")
     print(os.listdir("/tmp/"))
         
     try: 
