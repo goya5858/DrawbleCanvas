@@ -50,6 +50,9 @@ def lambda_handler(event, context):
     cv2.imwrite(tmp_filename,img) # jpgファイルの保存
     print("success img save to /tmp/")
     print(os.listdir("/tmp/"))
+
+    imgEncode = base64.b64encode( img )
+    print("Encode return IMG")
         
     try: 
         s3.upload_file(tmp_filename, bucket_name, filename)
@@ -61,7 +64,7 @@ def lambda_handler(event, context):
                     "Access-Control-Allow-Origin": '*',
                     "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
                        },
-            'body': json.dumps('Hello from Lambda!')
+            'body': json.dumps(imgEncode)
         }
     except :
         return {

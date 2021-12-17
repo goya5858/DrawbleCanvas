@@ -5,6 +5,7 @@ const PostImgFile = () => {
   //const [rawData,    setRawData]    = useState<File>();
   const [submitData, setSubmitData] = useState<string>();
   const [imgURL,     setImgURL]     = useState<string>();
+  const [replyImg,   setReplyImg]   = useState<string>();
 
   useEffect( ()=>{
     //console.log("submitData: ", submitData);
