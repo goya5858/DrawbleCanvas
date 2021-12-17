@@ -56,6 +56,8 @@ def lambda_handler(event, context):
         
     try: 
         s3.upload_file(tmp_filename, bucket_name, filename)
+        body = json.dumps(imgEncode)
+        print("Base64 convert to JSON")
     
         return {
             'statusCode': 200,
@@ -64,7 +66,7 @@ def lambda_handler(event, context):
                     "Access-Control-Allow-Origin": '*',
                     "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
                        },
-            'body': json.dumps(imgEncode)
+            'body': body
         }
     except :
         return {
