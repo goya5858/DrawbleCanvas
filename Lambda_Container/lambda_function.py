@@ -73,7 +73,7 @@ def lambda_handler(event, context):
                     "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
                     "Content-Type": "image/*"
                        },
-            'body': json.dumps('Hello lambda'),
+            'body': body,
             'isBase64Encoded': True
         }
     except :
