@@ -5,7 +5,8 @@ const PostImgFile = () => {
   //const [rawData,    setRawData]    = useState<File>();
   const [submitData, setSubmitData] = useState<string>();
   const [imgURL,     setImgURL]     = useState<string>();
-  const [replyImg,   setReplyImg]   = useState<string>();
+  const [replyImgURL,setReplyImgURL]   = useState<string>();
+  //let new_Img = new Image();
 
   useEffect( ()=>{
     //console.log("submitData: ", submitData);
@@ -49,6 +50,11 @@ const PostImgFile = () => {
     })
     .then(res => {
       console.log(res)
+      //new_Img.src = res.data;
+      let new_Img:File      = createJpegFile4Base64( res.data, "new_img" )
+      let newImgURL:string  = URL.createObjectURL( new_Img );
+      setReplyImgURL( newImgURL );
+      console.log(new_Img);
     })
     .catch(results => {
       console.log(results);
@@ -62,7 +68,8 @@ const PostImgFile = () => {
              accept="image/*" 
              onChange={handleChange}
       />
-      <img src={ imgURL }  alt="description"/>
+      <img src={ imgURL } alt="description"/>
+      <img src={ replyImgURL }  alt="description"/>
       <button type="button"
               onClick={handleSubmitData}
              >submit</button>
@@ -91,3 +98,15 @@ const toBase64 = async (file: File) => {
       return result;
     });
 }
+
+const createJpegFile4Base64 = function (base64: string, name: string) {
+  // base64のデコード
+  const bin = atob(base64.replace(/^.*,/, ''));
+  // バイナリデータ化
+  const buffer = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) {
+      buffer[i] = bin.charCodeAt(i);
+  }
+  // ファイルオブジェクト生成(この例ではjpegファイル)
+  return new File([buffer.buffer], name, {type: "image/jpg"});
+};
