@@ -68,9 +68,10 @@ def lambda_handler(event, context):
         return {
             'statusCode': 200,
             "headers": {
-                    "Access-Control-Allow-Headers": { "Content-Type": "image/png" },
+                    "Access-Control-Allow-Headers": "Content-Type",
                     "Access-Control-Allow-Origin": '*',
-                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
+                    "Content-Type": "image/*"
                        },
             'body': json.dumps('Hello lambda'),
             'isBase64Encoded': True
