@@ -51,8 +51,16 @@ def lambda_handler(event, context):
     print("success img save to /tmp/")
     print(os.listdir("/tmp/"))
 
-    body = base64.b64encode(img).decode('utf-8')
+    
+    response = s3.get_object(
+            Bucket=bucket_name,
+            Key='20211217_072726.jpg',
+            )
+    res_img  = response['Body'].read()
+    print("type of res_img:", type(res_img))
+    body = base64.b64encode(res_img).decode('utf-8')
     print("Encode return IMG")
+    print("type of body:", type(body))
         
     try: 
         s3.upload_file(tmp_filename, bucket_name, filename)
