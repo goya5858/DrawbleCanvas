@@ -45,18 +45,30 @@ const PostImgFile = () => {
     });
   }
 
+  const downloadImg = () => {
+    if (!replyImgURL) return;
+    const dLink    = document.createElement("a"); // ダウンロード用のエレメント作成
+    dLink.href     = replyImgURL; //作成したエレメントにURIを設置
+    dLink.download = new Date().getTime() + ".jpg"; //DLするファイルの名前を設定
+    dLink.click();
+    dLink.remove();
+  }
+
   return (
     <div>
-      <input type="file" 
-             name="example" 
-             accept="image/*" 
+      <input type    ="file" 
+             name    ="example" 
+             accept  ="image/*" 
              onChange={handleChange}
       />
-      <img src={ imgURL } alt="description"/>
-      <img src={ replyImgURL }  alt="description"/>
-      <button type="button"
+      <img src={ imgURL }      alt="submit_img"/>
+      <img src={ replyImgURL } alt="return_img"/>
+      <button type   ="button"
               onClick={handleSubmitData}
              >submit</button>
+      <button type   ="button"
+              onClick={downloadImg}
+             >download</button>
     </div>
   );
 };
