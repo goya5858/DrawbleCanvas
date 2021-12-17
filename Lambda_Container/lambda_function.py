@@ -50,20 +50,21 @@ def lambda_handler(event, context):
     cv2.imwrite(tmp_filename,img) # jpgファイルの保存
     print("success img save to /tmp/")
     print(os.listdir("/tmp/"))
-
-    
-    response = s3.get_object(
-            Bucket=bucket_name,
-            Key='20211217_072726.jpg',
-            )
-    res_img  = response['Body'].read()
-    print("type of res_img:", type(res_img))
-    body = base64.b64encode(res_img).decode('utf-8')
-    print("Encode return IMG")
-    print("type of body:", type(body))
         
     try: 
+        # 画像のアップロード
         s3.upload_file(tmp_filename, bucket_name, filename)
+
+        # アップロードした画像を読み込んでクライアントに返す
+        response = s3.get_object(
+                Bucket=bucket_name,
+                Key='20211217_072726.jpg',
+                )
+        res_img  = response['Body'].read()
+        print("type of res_img:", type(res_img))
+        body = base64.b64encode(res_img).decode('utf-8')
+        print("Encode return IMG")
+        print("type of body:", type(body))
     
         return {
             'statusCode': 200,
