@@ -51,22 +51,21 @@ def lambda_handler(event, context):
     print("success img save to /tmp/")
     print(os.listdir("/tmp/"))
 
-    imgEncode = base64.b64encode( img )
+    body = base64.b64encode(img).decode('utf-8')
     print("Encode return IMG")
         
     try: 
         s3.upload_file(tmp_filename, bucket_name, filename)
-        body = json.dumps(imgEncode)
-        print("Base64 convert to JSON")
     
         return {
             'statusCode': 200,
             "headers": {
-                    "Access-Control-Allow-Headers": "Content-Type",
+                    "Access-Control-Allow-Headers": { "Content-Type": "image/png" },
                     "Access-Control-Allow-Origin": '*',
                     "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
                        },
-            'body': body
+            'body': body,
+            'isBase64Encoded': True
         }
     except :
         return {
