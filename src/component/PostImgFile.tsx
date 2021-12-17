@@ -16,6 +16,7 @@ const PostImgFile = () => {
     const _rawdata: File = e.target.files[0] //提出する生データ
     const imgURL:string  = URL.createObjectURL(e.target.files[0]);
     setImgURL( imgURL ); //読み込んだ画像を表示
+    setReplyImgURL( "" );
 
     // ファイルデータをBase64でエンコードして、submit_dataにセットする
     if (!_rawdata) return ; 
@@ -28,6 +29,7 @@ const PostImgFile = () => {
   }
 
   const handleSubmitData = async() => {
+    if (!submitData) return ;
     axios( {
              method: 'post',
              url:    'https://txsei0q801.execute-api.ap-northeast-1.amazonaws.com/default/axiosFunction2',
@@ -55,20 +57,26 @@ const PostImgFile = () => {
   }
 
   return (
-    <div>
+    <div className='container'>
+      <div className='title'>画像</div>
       <input type    ="file" 
              name    ="example" 
              accept  ="image/*" 
              onChange={handleChange}
       />
-      <img src={ imgURL }      alt="submit_img"/>
-      <img src={ replyImgURL } alt="return_img"/>
-      <button type   ="button"
-              onClick={handleSubmitData}
-             >submit</button>
-      <button type   ="button"
-              onClick={downloadImg}
-             >download</button>
+      <div className='images'>
+        <img src={ imgURL }      alt="" className="submit-img" />
+        <img src={ replyImgURL } alt="" className="return-img" />
+      </div>
+      <div className='buttons'>
+        <button type   ="button"
+                onClick={handleSubmitData}
+               >submit</button>
+        <button type   ="button"
+                onClick={downloadImg}
+               >download</button>
+      </div>
+      
     </div>
   );
 };
