@@ -72,7 +72,7 @@ def lambda_handler(event, context):
                     "Access-Control-Allow-Origin": '*',
                     "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
                        },
-            'body': body,
+            'body': json.dumps('Hello lambda'),
             'isBase64Encoded': True
         }
     except :
