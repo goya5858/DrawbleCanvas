@@ -44,25 +44,31 @@ def lambda_handler(event, context):
     #print(jpg)
     img = cv2.imdecode(jpg, cv2.IMREAD_COLOR)
     print("success convert to IMG by imdecode")
+    print("type of img:", type(img))
 
     #with open(tmp_filename, "w") as f:
     #    f.write(text_raw)
     cv2.imwrite(tmp_filename,img) # jpgファイルの保存
     print("success img save to /tmp/")
     print(os.listdir("/tmp/"))
-        
+    
+    encode_parms  = [int(cv2.IMWRITE_WEBP_QUALITY), 50]
+    ret, enimg = cv2.imencode('.webp', img, encode_parms)
+    print("encode img")
+    print("type of ret & enimg:", type(ret), type(enimg) )
+
     try: 
         # 画像のアップロード
         s3.upload_file(tmp_filename, bucket_name, filename)
 
         # アップロードした画像を読み込んでクライアントに返す
-        response = s3.get_object(
-                Bucket=bucket_name,
-                Key=filename,
-                )
-        res_img  = response['Body'].read()
-        print("type of res_img:", type(res_img))
-        body = base64.b64encode(res_img).decode('utf-8')
+        #response = s3.get_object(
+        #        Bucket=bucket_name,
+        #        Key=filename,
+        #        )
+        #res_img  = response['Body'].read()
+        #print("type of res_img:", type(res_img))
+        body = base64.b64encode(enimg).decode('utf-8')
         print("Encode return IMG")
         print("type of body:", type(body))
     
