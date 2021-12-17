@@ -98,5 +98,8 @@ def predWithONNX( original_img ):
     input_img  = (input_img/255).astype(np.float32)
     ort_inputs = { "input": input_img }
     onnx_pred  = ort_session.run( None, ort_inputs )[0]
+    onnx_pred = onnx_pred[0].transpose(2,1,0)
     print("ONNX predict")
+    print("pred shape:", onnx_pred.shape)
+    print("pred type:", type(onnx_pred))
     return onnx_pred
