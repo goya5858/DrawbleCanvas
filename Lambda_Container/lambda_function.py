@@ -58,7 +58,7 @@ def lambda_handler(event, context):
         # アップロードした画像を読み込んでクライアントに返す
         response = s3.get_object(
                 Bucket=bucket_name,
-                Key='20211217_072726.jpg',
+                Key=filename,
                 )
         res_img  = response['Body'].read()
         print("type of res_img:", type(res_img))
