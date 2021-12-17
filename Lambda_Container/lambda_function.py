@@ -7,8 +7,10 @@ import base64
 import numpy as np
 import cv2
 import onnxruntime as ort 
+import gc
 
 def lambda_handler(event, context):
+    gc.collect()
     filename  = datetime.datetime.now().strftime('%Y%m%d_%H%M%S') + ".jpg"
     tmp_filename = "/tmp/" + filename
     bucket_name  = "test-bucket-5858"
@@ -28,10 +30,11 @@ def lambda_handler(event, context):
     
     ### 画像データのBase64(str)へのエンコード ###
     body = encodeIMGtoB64( img )
-
+    gc.collect()
     try: 
         # S3へ画像のアップロード
         s3.upload_file(tmp_filename, bucket_name, filename)
+        os.remove(tmp_filename)
     
         return {
             'statusCode': 200,
