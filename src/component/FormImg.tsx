@@ -1,7 +1,8 @@
-import React, {useState} from "react";
+import {useState} from "react";
 
 const FormImg = () => {
     const [fileURL, setFileURL] = useState("");
+    
     function processImg(event: any) {
         const imgFile = event.target.files[0];
         const imgURL  = URL.createObjectURL(imgFile);
@@ -10,7 +11,7 @@ const FormImg = () => {
     }
     return (
         <div>
-            <form method="post" encType="multipart/form-data" action="https://duw8yp1jr2.execute-api.ap-northeast-1.amazonaws.com/prob/">
+            <form method="post" encType="multipart/form-data" action="localhost:8080">
                 <input type="file" 
                        name="example" 
                        accept="image/*" 

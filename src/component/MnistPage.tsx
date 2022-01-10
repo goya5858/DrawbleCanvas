@@ -1,5 +1,3 @@
-import React from "react";
-//import {InferenceSession, Tensor} from "onnxjs"
 import DrawableCanvasF from "./DrawableCanvasF";
 import FormImg from "./FormImg";
 
