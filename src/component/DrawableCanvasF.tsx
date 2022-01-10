@@ -77,7 +77,7 @@ const DrawableCanvasF = (props: CanvasProps) => {
         }
     };
 
-    const getData= () => {
+    const setData= () => {
         //const ctx  = getContext(canvas);
         const hctx = getContext(hidden_canvas);
         const data = new Float32Array(28*28); //出力用の28*28=784の一次元データ
@@ -132,7 +132,7 @@ const DrawableCanvasF = (props: CanvasProps) => {
             />
             <button onClick={clearCanvas}>clear</button>
             <button onClick={downloadImg}>Download</button>
-            <button onClick={getData}>GetData</button>
+            <button onClick={setData}>SetData</button>
         </div>
     )
 };
