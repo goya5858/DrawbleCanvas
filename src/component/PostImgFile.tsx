@@ -22,7 +22,7 @@ const PostImgFile = () => {
     if (!_rawdata) return ; 
     const base64file  = await toBase64(_rawdata);
     const _submitdata = JSON.stringify( {
-                  line_count: null,
+                  line_count: "pass",
                   text: base64file,
                 } )
     setSubmitData( _submitdata );
@@ -33,6 +33,7 @@ const PostImgFile = () => {
     axios( {
              method: 'post',
              url:    'https://txsei0q801.execute-api.ap-northeast-1.amazonaws.com/default/axiosFunction2',
+             //url: 'https://0pc9jzuqyl.execute-api.ap-northeast-1.amazonaws.com/default/goLambdaFunction' ,
              data:   submitData,
           } )
     .then( res => {
